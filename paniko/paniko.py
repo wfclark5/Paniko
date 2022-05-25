@@ -183,6 +183,11 @@ class Kaniko(object):
     skip_tls_verify: bool = False
 
     """
+    Set this flag as --use-new-run to use experimental runtime
+    """
+    use_new_run: bool = False
+
+    """
     Set this flag to skip TLS certificate validation when pulling from a registry.
     It is supposed to be used for testing purposes only and should not be used in production!
     """
@@ -221,10 +226,6 @@ class Kaniko(object):
     """
     context_sub_path: Optional[str] = None
 
-    """
-    Set this flag as --use-new-run to use experimental runtime
-    """
-    use_new_run: Optional[str] = None
 
     """
     Set this flag as --push-retry to retry pushing the image
