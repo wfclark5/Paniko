@@ -1,6 +1,6 @@
 # Paniko
 
-Paniko is a Python wrapper for Google's [Kaniko](https://github.com/GoogleContainerTools/kaniko). Kaniko is a command line utility that enables the building of container images that can't easily or securely run a Docker daemon. This includes building images within a Kubernetes Pod or serverless infrastructure such as AWS's Fargate. 
+Paniko is a Python wrapper for Google's [Kaniko](https://github.com/GoogleContainerTools/kaniko). Kaniko is a command line utility that enables the building of container images within environments that can't easily or securely run a Docker daemon. This includes building images within a Kubernetes Pod or serverless infrastructure such as AWS's Fargate. 
 
 It includes the most updated Kaniko commands and streaming of Kaniko's outputs.  
 
