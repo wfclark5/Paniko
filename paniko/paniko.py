@@ -5,7 +5,6 @@ from enum import Enum
 from typing import List, Optional, AnyStr, Callable
 import time
 
-from numpy import str_
 
 class KanikoSnapshotMode(Enum):
     full = 'full'

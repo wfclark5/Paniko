@@ -4,38 +4,31 @@ import paniko
 from setuptools import setup, find_packages
 
 
-with open(os.path.join(os.path.dirname(__file__), 'README.md'), encoding='utf-8') as f:
-    README = f.read()
 
+
+VERSION = (1, 0, 0)
+
+__title__ = 'paniko'
+__author__ = 'William Clark'
+__email__ = 'wfclark5@outlook.com'
+__license__ = 'Apache License 2.0'
+__version__ = '.'.join(map(str, VERSION))
 
 setup(
-    name=paniko.__title__,
-    version=paniko.__version__,
+    name='paniko',
+    version='1.0.0',
     packages=find_packages(
         exclude=('tests', '*tests', '*tests*')
     ),  # We throw away from the assembly too much.
     include_package_data=True,
-    test_suite='tests',  # Include tests.
     license='Apache 2.0',  # Put the license.
-    description='Python paniko https://github.com/GoogleContainerTools/Kaniko',
-    long_description=README,
-    long_description_content_type='text/markdown',
+    description='Python Kaniko https://github.com/GoogleContainerTools/Kaniko',
     install_requires=[],
     tests_require=['codecov>=2', 'coverage>=4'],
     setup_requires=['twine>=1', 'mkdocs>=1'],
-    url=paniko.__url__,
-    author=paniko.__author__,
-    author_email=paniko.__email__,
+    author='William Clark',
+    author_email='wfclark5@outlook.com',
     maintainer='William Clark',
     maintainer_email='wfclark5@outlook.com',
-    classifiers=[
-        'Environment :: Server Environment',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache Software License',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-    ],
     zip_safe=True,
 )
