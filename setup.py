@@ -7,6 +7,7 @@ setup(
     packages=find_packages(include=['paniko*'], exclude=['*tests']),
     license="Apache 2.0",
     long_description=open("README.md", encoding='utf-8').read(),
+    long_description_content_type='text/markdown',
     description="Python Kaniko https://github.com/GoogleContainerTools/Kaniko",
     install_requires=[],
     tests_require=["codecov>=2", "coverage>=4"],
