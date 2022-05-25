@@ -4,9 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name="paniko",
     version="1.0.0",
-    packages=find_packages(
-        exclude=("tests", "*tests", "*tests*")
-    ), 
+    packages=find_packages(where="paniko"),
     license="Apache 2.0",
     long_description=open("README.md", encoding='utf-8').read(),
     description="Python Kaniko https://github.com/GoogleContainerTools/Kaniko",
