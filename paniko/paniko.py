@@ -7,17 +7,18 @@ import time
 
 
 class KanikoSnapshotMode(Enum):
-    full = 'full'
-    time = 'time'
-    redo = 'redo'
+    full = "full"
+    time = "time"
+    redo = "redo"
+
 
 class KanikoVerbosity(Enum):
-    panic = 'panic'
-    fatal = 'fatal'
-    error = 'error'
-    warn = 'warn'
-    info = 'info'
-    debug = 'debug'
+    panic = "panic"
+    fatal = "fatal"
+    error = "error"
+    warn = "warn"
+    info = "info"
+    debug = "debug"
 
 
 class KanikoBuildException(Exception):
@@ -29,7 +30,7 @@ class KanikoBuildException(Exception):
         self.body = body
 
         body_string = "\n".join(body)
-        super().__init__(f'Kaniko failed with exit code {exit_code}: {body_string}')
+        super().__init__(f"Kaniko failed with exit code {exit_code}: {body_string}")
 
 
 class Kaniko(object):
@@ -224,12 +225,12 @@ class Kaniko(object):
     Set this flag as --use-new-run to use experimental runtime
     """
     use_new_run: Optional[str] = None
-    
+
     """
     Set this flag as --push-retry to retry pushing the image
     """
     push_retry: Optional[str] = None
-    
+
     """
     Set this flag as --skip-unused-stages to skip unused stages
     """
@@ -238,14 +239,12 @@ class Kaniko(object):
     """
     Path to kaniko
     """
-    kaniko_path: str = '/kaniko'
+    kaniko_path: str = "/kaniko"
 
     def __init__(self):
-        self._configure_attribute_names = tuple([
-            key
-            for key in self.__class__.__dict__.keys()
-            if not key.startswith('_')
-        ])
+        self._configure_attribute_names = tuple(
+            [key for key in self.__class__.__dict__.keys() if not key.startswith("_")]
+        )
 
     def build(self, **kwargs) -> List[str]:
         """
@@ -259,19 +258,20 @@ class Kaniko(object):
         self.configure(**kwargs)
         self._write_config()
 
-        res = subprocess.Popen(self.shell_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        res = subprocess.Popen(
+            self.shell_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        )
         # res.wait()
 
         while True:
             rd = res.stdout.readline()
             # convert rd from bytes to str
-            print(str(rd, 'UTF-8'), end='')  # and whatever you want to do...
+            print(str(rd, "UTF-8"), end="")  # and whatever you want to do...
             if not rd:  # EOF
                 returncode = res.poll()
                 if returncode is not None:
                     break
                 time.sleep(0.1)  # cmd closed stdout, but not exited yet
-
 
         exit_code = res.returncode
         body = self._parse_logs(res.stdout.read())
@@ -296,7 +296,7 @@ class Kaniko(object):
         :return: shell command arguments to invoke subprocess.Popen
         :rtype: List[str]
         """
-        executor_path = self.kaniko_path + '/executor'
+        executor_path = self.kaniko_path + "/executor"
 
         command = [executor_path]
         for handler in self._shell_part_handlers:
@@ -310,136 +310,136 @@ class Kaniko(object):
 
     def _make_config(self):
         return {
-            'auths': {
+            "auths": {
                 self.docker_registry_uri: {
-                    'username': self.registry_username,
-                    'password': self.registry_password,
+                    "username": self.registry_username,
+                    "password": self.registry_password,
                 }
             }
         }
 
     def _write_config(self):
-        config_folder_path = os.path.join(self.kaniko_path, '.docker')
+        config_folder_path = os.path.join(self.kaniko_path, ".docker")
         os.makedirs(config_folder_path, exist_ok=True)
-        with open(os.path.join(config_folder_path, 'config.json'), 'w') as config:
+        with open(os.path.join(config_folder_path, "config.json"), "w") as config:
             config.write(json.dumps(self._make_config()))
 
     def _parse_logs(self, logs: AnyStr) -> List[str]:
-        rows = logs.decode('utf-8').strip().split('\n')
+        rows = logs.decode("utf-8").strip().split("\n")
         return list(map(str.strip, rows))
 
     @property
     def _shell_part_handlers(self) -> List[str]:
-        return [method for method in dir(self) if method.startswith('_get_shell_part_')]
+        return [method for method in dir(self) if method.startswith("_get_shell_part_")]
 
     def _get_shell_part_build_args(self, command: List[str]):
         for arg in self.build_args:
-            command.append(f'--build-arg={arg}')
+            command.append(f"--build-arg={arg}")
 
     def _get_shell_part_cache(self, command: List[str]):
         if self.cache:
-            command.append('--cache')
+            command.append("--cache")
 
     def _get_shell_part_cache_dir(self, command: List[str]):
         if self.cache_dir:
-            command.append(f'--cache-dir={self.cache_dir}')
+            command.append(f"--cache-dir={self.cache_dir}")
 
     def _get_shell_part_cache_repo(self, command: List[str]):
         if self.cache_repo:
-            command.append(f'--cache-repo={self.cache_repo}')
+            command.append(f"--cache-repo={self.cache_repo}")
 
     def _get_shell_part_destination(self, command: List[str]):
         if self.destination:
-            command.append(f'--destination={self.destination}')
+            command.append(f"--destination={self.destination}")
 
     def _get_shell_part_digest_file(self, command: List[str]):
         if self.digest_file:
-            command.append(f'--digest-file={self.digest_file}')
+            command.append(f"--digest-file={self.digest_file}")
 
     def _get_shell_part_dockerfile(self, command: List[str]):
         if self.dockerfile:
-            command.append(f'--dockerfile={self.dockerfile}')
+            command.append(f"--dockerfile={self.dockerfile}")
 
     def _get_shell_part_force(self, command: List[str]):
         if self.force:
-            command.append('--force')
+            command.append("--force")
 
     def _get_shell_part_oci_layout_path(self, command: List[str]):
         if self.oci_layout_path:
-            command.append(f'--oci-layout-path={self.oci_layout_path}')
+            command.append(f"--oci-layout-path={self.oci_layout_path}")
 
     def _get_shell_part_insecure_registry(self, command: List[str]):
         for arg in self.insecure_registry:
-            command.append(f'--insecure-registry={arg}')
+            command.append(f"--insecure-registry={arg}")
 
     def _get_shell_part_skip_tls_verify_registry(self, command: List[str]):
         for arg in self.skip_tls_verify_registry:
-            command.append(f'--skip-tls-verify-registry={arg}')
+            command.append(f"--skip-tls-verify-registry={arg}")
 
     def _get_shell_part_cleanup(self, command: List[str]):
         if self.cleanup:
-            command.append('--cleanup')
+            command.append("--cleanup")
 
     def _get_shell_part_insecure(self, command: List[str]):
         if self.insecure:
-            command.append('--insecure')
+            command.append("--insecure")
 
     def _get_shell_part_insecure_pull(self, command: List[str]):
         if self.insecure_pull:
-            command.append('--insecure-pull')
+            command.append("--insecure-pull")
 
     def _get_shell_part_no_push(self, command: List[str]):
         if self.no_push:
-            command.append('--no-push')
+            command.append("--no-push")
 
     def _get_shell_part_reproducible(self, command: List[str]):
         if self.reproducible:
-            command.append('--reproducible')
+            command.append("--reproducible")
 
     def _get_shell_part_single_snapshot(self, command: List[str]):
         if self.single_snapshot:
-            command.append('--single-snapshot')
+            command.append("--single-snapshot")
 
     def _get_shell_part_skip_tls_verify(self, command: List[str]):
         if self.skip_tls_verify:
-            command.append('--skip-tls-verify')
+            command.append("--skip-tls-verify")
 
     def _get_shell_part_skip_tls_verify_pull(self, command: List[str]):
         if self.skip_tls_verify_pull:
-            command.append('--skip-tls-verify-pull')
+            command.append("--skip-tls-verify-pull")
 
     def _get_shell_part_snapshot_mode(self, command: List[str]):
         if self.snapshot_mode:
-            command.append(f'--snapshotMode={self.snapshot_mode.value}')
+            command.append(f"--snapshotMode={self.snapshot_mode.value}")
 
     def _get_shell_part_target(self, command: List[str]):
         if self.target:
-            command.append(f'--target={self.target}')
+            command.append(f"--target={self.target}")
 
     def _get_shell_part_tar_path(self, command: List[str]):
         if self.tar_path:
-            command.append(f'--tarPath={self.tar_path}')
+            command.append(f"--tarPath={self.tar_path}")
 
     def _get_shell_part_context(self, command: List[str]):
         if self.context:
-            command.append(f'--context={self.context.value}')
+            command.append(f"--context={self.context.value}")
 
     def _get_shell_part_context_sub_path(self, command: List[str]):
         if self.context_sub_path:
-            command.append(f'--context-sub-path={self.context_sub_path.value}')
+            command.append(f"--context-sub-path={self.context_sub_path.value}")
 
     def _get_shell_part_use_new_run(self, command: List[str]):
         if self.use_new_run:
-            command.append(f'--use-new-run={self.use_new_run.value}')
+            command.append(f"--use-new-run={self.use_new_run.value}")
 
     def _get_shell_part_skip_unused_stages(self, command: List[str]):
         if self.skip_unused_stages:
-            command.append(f'--skip-unused-stages={self.skip_unused_stages.value}')
+            command.append(f"--skip-unused-stages={self.skip_unused_stages.value}")
 
     def _get_shell_part_verbosity(self, command: List[str]):
         if self.push_retry:
-            command.append(f'--push-retry={self.push_retry.value}')
+            command.append(f"--push-retry={self.push_retry.value}")
 
     def _get_shell_part_verbosity(self, command: List[str]):
         if self.verbosity:
-            command.append(f'--verbosity={self.verbosity.value}')
+            command.append(f"--verbosity={self.verbosity.value}")
