@@ -392,6 +392,10 @@ class Kaniko(object):
         if self.no_push:
             command.append("--no-push")
 
+    def _get_shell_part_use_new_run(self, command: List[str]):
+        if self.use_new_run:
+            command.append("--use-new-run")
+
     def _get_shell_part_reproducible(self, command: List[str]):
         if self.reproducible:
             command.append("--reproducible")
@@ -423,10 +427,6 @@ class Kaniko(object):
     def _get_shell_part_context_sub_path(self, command: List[str]):
         if self.context_sub_path:
             command.append(f"--context-sub-path={self.context_sub_path}")
-
-    def _get_shell_part_use_new_run(self, command: List[str]):
-        if self.use_new_run:
-            command.append(f"--use-new-run={self.use_new_run}")
 
     def _get_shell_part_skip_unused_stages(self, command: List[str]):
         if self.skip_unused_stages:
