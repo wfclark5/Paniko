@@ -408,10 +408,6 @@ class Kaniko(object):
         if self.skip_tls_verify_pull:
             command.append("--skip-tls-verify-pull")
 
-    def _get_shell_part_snapshot_mode(self, command: List[str]):
-        if self.snapshot_mode:
-            command.append(f"--snapshotMode={self.snapshot_mode.value}")
-
     def _get_shell_part_target(self, command: List[str]):
         if self.target:
             command.append(f"--target={self.target}")
@@ -422,23 +418,27 @@ class Kaniko(object):
 
     def _get_shell_part_context(self, command: List[str]):
         if self.context:
-            command.append(f"--context={self.context.value}")
+            command.append(f"--context={self.context}")
 
     def _get_shell_part_context_sub_path(self, command: List[str]):
         if self.context_sub_path:
-            command.append(f"--context-sub-path={self.context_sub_path.value}")
+            command.append(f"--context-sub-path={self.context_sub_path}")
 
     def _get_shell_part_use_new_run(self, command: List[str]):
         if self.use_new_run:
-            command.append(f"--use-new-run={self.use_new_run.value}")
+            command.append(f"--use-new-run={self.use_new_run}")
 
     def _get_shell_part_skip_unused_stages(self, command: List[str]):
         if self.skip_unused_stages:
-            command.append(f"--skip-unused-stages={self.skip_unused_stages.value}")
+            command.append(f"--skip-unused-stages={self.skip_unused_stages}")
 
     def _get_shell_part_verbosity(self, command: List[str]):
         if self.push_retry:
-            command.append(f"--push-retry={self.push_retry.value}")
+            command.append(f"--push-retry={self.push_retry}")
+
+    def _get_shell_part_snapshot_mode(self, command: List[str]):
+        if self.snapshot_mode:
+            command.append(f"--snapshotMode={self.snapshot_mode.value}")
 
     def _get_shell_part_verbosity(self, command: List[str]):
         if self.verbosity:
