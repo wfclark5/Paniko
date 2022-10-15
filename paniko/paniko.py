@@ -147,6 +147,12 @@ class Kaniko(object):
     Set this flag to clean the filesystem at the end of the build.
     """
     cleanup: bool = False
+        
+    """
+    Set if you want to compress cache throughout build
+    """
+    
+    compressed_caching: bool = False
 
     """
     Set this flag if you want to push images to a plain HTTP registry.
@@ -352,7 +358,7 @@ class Kaniko(object):
     def _get_shell_part_destination(self, command: List[str]):
         if self.destination:
             command.append(f"--destination={self.destination}")
-
+            
     def _get_shell_part_digest_file(self, command: List[str]):
         if self.digest_file:
             command.append(f"--digest-file={self.digest_file}")
@@ -381,6 +387,10 @@ class Kaniko(object):
         if self.cleanup:
             command.append("--cleanup")
 
+    def _get_shell_compressed_caching(self, command: List[str]):
+        if self.compressed_caching:
+            command.append("--compressed-caching")
+            
     def _get_shell_part_insecure(self, command: List[str]):
         if self.insecure:
             command.append("--insecure")
@@ -439,7 +449,7 @@ class Kaniko(object):
 
     def _get_shell_part_snapshot_mode(self, command: List[str]):
         if self.snapshot_mode:
-            command.append(f"--snapshotMode={self.snapshot_mode.value}")
+            command.append(f"--snapshot-mode={self.snapshot_mode.value}")
 
     def _get_shell_part_verbosity(self, command: List[str]):
         if self.verbosity:

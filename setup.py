@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="paniko",
-    version="1.0.0",
+    version="1.0.1",
     packages=find_packages(include=['paniko*'], exclude=['*tests']),
     license="Apache 2.0",
     long_description=open("README.md", encoding='utf-8').read(),
